@@ -1,487 +1,1094 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bailey's Birthday Beach Weekend - Food Planner</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Bailey's Birthday Beach Weekend - Food Planner</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+			body {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+				min-height: 100vh;
+				padding: 20px;
+			}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
+			.container {
+				max-width: 1200px;
+				margin: 0 auto;
+				background: white;
+				border-radius: 20px;
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+				overflow: hidden;
+			}
 
-        .header {
-            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
+			.header {
+				background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+				color: white;
+				padding: 30px;
+				text-align: center;
+			}
 
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+			.header h1 {
+				font-size: 2.5em;
+				margin-bottom: 10px;
+				text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+			}
 
-        .trip-info {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
+			.trip-info {
+				display: flex;
+				justify-content: center;
+				gap: 30px;
+				margin-top: 15px;
+				flex-wrap: wrap;
+			}
 
-        .info-card {
-            background: rgba(255,255,255,0.2);
-            padding: 15px 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-        }
+			.info-card {
+				background: rgba(255, 255, 255, 0.2);
+				padding: 15px 20px;
+				border-radius: 10px;
+				backdrop-filter: blur(10px);
+				min-width: 250px;
+				flex: 1;
+			}
 
-        .info-card input {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.5);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 16px;
-        }
+			.info-card input {
+				background: transparent;
+				border: 1px solid rgba(255, 255, 255, 0.5);
+				color: white;
+				padding: 8px 12px;
+				border-radius: 5px;
+				font-size: 14px;
+				width: 100%;
+				min-width: 200px;
+			}
 
-        .info-card input::placeholder {
-            color: rgba(255,255,255,0.8);
-        }
+			.info-card input::placeholder {
+				color: rgba(255, 255, 255, 0.8);
+			}
 
-        .main-content {
-            padding: 30px;
-        }
+			.main-content {
+				padding: 30px;
+			}
 
-        .meal-grid {
-            display: grid;
-            grid-template-columns: 150px repeat(3, 1fr);
-            gap: 2px;
-            background: #ddd;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
+			.meal-grid {
+				display: grid;
+				grid-template-columns: 150px repeat(3, 1fr);
+				gap: 2px;
+				background: #ddd;
+				border-radius: 10px;
+				overflow: hidden;
+				margin-bottom: 30px;
+			}
 
-        .grid-header {
-            background: #2d3436;
-            color: white;
-            padding: 20px;
-            font-weight: bold;
-            text-align: center;
-            font-size: 1.1em;
-        }
+			.grid-header {
+				background: #2d3436;
+				color: white;
+				padding: 20px;
+				font-weight: bold;
+				text-align: center;
+				font-size: 1.1em;
+			}
 
-        .meal-label {
-            background: #636e72;
-            color: white;
-            padding: 20px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+			.meal-label {
+				background: #636e72;
+				color: white;
+				padding: 20px;
+				font-weight: bold;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 
-        .meal-cell {
-            background: white;
-            padding: 15px;
-            min-height: 120px;
-            position: relative;
-            border: none;
-            resize: none;
-            font-family: inherit;
-            font-size: 14px;
-            line-height: 1.4;
-        }
+			.meal-cell {
+				background: white;
+				padding: 15px;
+				min-height: 120px;
+				position: relative;
+				border: none;
+				resize: none;
+				font-family: inherit;
+				font-size: 14px;
+				line-height: 1.4;
+			}
 
-        .meal-cell:focus {
-            outline: 3px solid #74b9ff;
-            background: #f8f9ff;
-        }
+			.meal-cell:focus {
+				outline: 3px solid #74b9ff;
+				background: #f8f9ff;
+			}
 
-        .special-notes {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
+			.special-notes {
+				background: #fff3cd;
+				border: 2px solid #ffc107;
+				border-radius: 10px;
+				padding: 20px;
+				margin-bottom: 20px;
+			}
 
-        .special-notes h3 {
-            color: #856404;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
+			.special-notes h3 {
+				color: #856404;
+				margin-bottom: 15px;
+				font-size: 1.3em;
+			}
 
-        .notes-textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: inherit;
-            resize: vertical;
-        }
+			.notes-textarea {
+				width: 100%;
+				min-height: 100px;
+				padding: 10px;
+				border: 1px solid #ddd;
+				border-radius: 5px;
+				font-family: inherit;
+				resize: vertical;
+			}
 
-        .status-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+			.status-indicator {
+				position: fixed;
+				top: 10px;
+				right: 10px;
+				background: white;
+				padding: 8px 15px;
+				border-radius: 20px;
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				z-index: 1000;
+				font-size: 14px;
+			}
 
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #ddd;
-        }
+			.active-users {
+				background: #2ecc71;
+				color: white;
+				padding: 4px 12px;
+				border-radius: 15px;
+				font-weight: bold;
+				margin-left: 8px;
+				font-size: 12px;
+			}
 
-        .status-dot.connected {
-            background: #00b894;
-        }
+			.status-dot {
+				width: 10px;
+				height: 10px;
+				border-radius: 50%;
+				background: #ddd;
+			}
 
-        .status-dot.saving {
-            background: #fdcb6e;
-            animation: pulse 1s infinite;
-        }
+			.status-dot.connected {
+				background: #00b894;
+			}
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+			.status-dot.saving {
+				background: #fdcb6e;
+				animation: pulse 1s infinite;
+			}
 
-        .share-section {
-            background: #e8f5e9;
-            border: 2px solid #c8e6c9;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+			@keyframes pulse {
+				0% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0.5;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
 
-        .share-url {
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            word-break: break-all;
-            font-family: monospace;
-        }
+			.share-section {
+				background: #e8f5e9;
+				border: 2px solid #c8e6c9;
+				border-radius: 10px;
+				padding: 20px;
+				margin-bottom: 20px;
+				text-align: center;
+			}
 
-        .copy-button {
-            background: #4caf50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+			.share-url {
+				background: white;
+				padding: 10px;
+				border-radius: 5px;
+				margin: 10px 0;
+				word-break: break-all;
+				font-family: monospace;
+			}
 
-        .copy-button:hover {
-            background: #45a049;
-        }
+			.copy-button {
+				background: #4caf50;
+				color: white;
+				border: none;
+				padding: 10px 20px;
+				border-radius: 5px;
+				cursor: pointer;
+				font-size: 16px;
+			}
 
-        @media (max-width: 768px) {
-            .meal-grid {
-                grid-template-columns: 100px 1fr;
-                font-size: 14px;
-            }
+			.copy-button:hover {
+				background: #45a049;
+			}
 
-            .grid-header:not(:first-child) {
-                display: none;
-            }
+			/* Mobile Tabs Styling */
+			.mobile-tabs {
+				display: none;
+				background: white;
+				border-radius: 10px;
+				margin-bottom: 20px;
+				overflow: hidden;
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			}
 
-            .meal-cell {
-                grid-column: 2;
-                position: relative;
-            }
+			.tab-button {
+				flex: 1;
+				background: #f8f9fa;
+				border: none;
+				padding: 15px 20px;
+				font-size: 16px;
+				font-weight: 600;
+				color: #636e72;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				border-right: 1px solid #dee2e6;
+			}
 
-            .meal-cell::before {
-                content: attr(data-day);
-                position: absolute;
-                top: 5px;
-                right: 10px;
-                background: #74b9ff;
-                color: white;
-                padding: 2px 8px;
-                border-radius: 10px;
-                font-size: 12px;
-                font-weight: bold;
-            }
+			.tab-button:last-child {
+				border-right: none;
+			}
 
-            .trip-info {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="status-indicator">
-        <div class="status-dot" id="statusDot"></div>
-        <span id="statusText">Connecting...</span>
-    </div>
+			.tab-button.active {
+				background: #74b9ff;
+				color: white;
+			}
 
-    <div class="container">
-        <div class="header">
-            <h1>🏖️ Bailey's Birthday Beach Weekend</h1>
-            <p style="max-width: 800px; margin: 20px auto; font-size: 1.1em; line-height: 1.6; opacity: 0.95;">
-                Hey beach crew ☀️! Bailey's birthday beach weekend is all set for July 25–27. I tried to email everyone the info to our townhome at the Palmilla Beach Resort when I booked, let me know if you didn't get it! Here's the link as well: 
-                <a href="https://www.vacasa.com/unit/97484" target="_blank" style="color: white; text-decoration: underline;">https://www.vacasa.com/unit/97484</a>
-                <br><br>
-                We're excited to celebrate her with all of you! It means a lot that you're showing up for her. 🎉
-            </p>
-            <div class="trip-info">
-                <div class="info-card">
-                    <strong>📅 Event:</strong> 
-                    <input type="text" id="eventName" placeholder="Bailey's Birthday" value="Bailey's Birthday Beach Weekend" />
-                </div>
-                <div class="info-card">
-                    <strong>📆 Dates:</strong> 
-                    <input type="text" id="groupSize" placeholder="July 25-27" value="July 25-27" />
-                </div>
-                <div class="info-card">
-                    <strong>📍 Location:</strong> 
-                    <input type="text" id="location" placeholder="Palmilla Beach Resort" value="Palmilla Beach Resort" />
-                </div>
-            </div>
-        </div>
+			.tab-button:hover:not(.active) {
+				background: #e9ecef;
+			}
 
-        <div class="main-content">
-            <div class="share-section">
-                <h3>📤 Share This Itinerary</h3>
-                <p>Anyone with this link can view and edit the meal plan in real-time!</p>
-                <div class="share-url" id="shareUrl">Loading...</div>
-                <button class="copy-button" onclick="copyShareUrl()">📋 Copy Link</button>
-            </div>
+			.mobile-day-container {
+				display: none;
+			}
 
-            <div class="meal-grid">
-                <div class="grid-header">Meal</div>
-                <div class="grid-header">Day 1</div>
-                <div class="grid-header">Day 2</div>
-                <div class="grid-header">Day 3</div>
+			.day-content {
+				background: white;
+				border-radius: 10px;
+				padding: 20px;
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			}
 
-                <div class="meal-label">🌅 Breakfast</div>
-                <textarea class="meal-cell" data-day="Day 1" data-meal="breakfast-1" placeholder="Click to add breakfast plans..."></textarea>
-                <textarea class="meal-cell" data-day="Day 2" data-meal="breakfast-2" placeholder="Click to add breakfast plans..."></textarea>
-                <textarea class="meal-cell" data-day="Day 3" data-meal="breakfast-3" placeholder="Click to add breakfast plans..."></textarea>
+			.mobile-meal-group {
+				margin-bottom: 20px;
+			}
 
-                <div class="meal-label">🌞 Lunch</div>
-                <textarea class="meal-cell" data-day="Day 1" data-meal="lunch-1" placeholder="Click to add lunch plans..."></textarea>
-                <textarea class="meal-cell" data-day="Day 2" data-meal="lunch-2" placeholder="Click to add lunch plans..."></textarea>
-                <textarea class="meal-cell" data-day="Day 3" data-meal="lunch-3" placeholder="Click to add lunch plans..."></textarea>
+			.mobile-meal-group:last-child {
+				margin-bottom: 0;
+			}
 
-                <div class="meal-label">🌙 Dinner</div>
-                <textarea class="meal-cell" data-day="Day 1" data-meal="dinner-1" placeholder="Click to add dinner plans..."></textarea>
-                <textarea class="meal-cell" data-day="Day 2" data-meal="dinner-2" placeholder="Click to add dinner plans..."></textarea>
-                <textarea class="meal-cell" data-day="Day 3" data-meal="dinner-3" placeholder="Click to add dinner plans..."></textarea>
-            </div>
+			.mobile-meal-group h4 {
+				color: #2d3436;
+				margin-bottom: 15px;
+				font-size: 18px;
+				font-weight: 600;
+				padding: 0 0 8px 0;
+				background: transparent;
+				border-radius: 0;
+				border-left: none;
+				border-bottom: 2px solid #74b9ff;
+			}
 
-            <div class="special-notes">
-                <h3>📝 Special Notes & Dietary Restrictions</h3>
-                <textarea class="notes-textarea" id="specialNotes" placeholder="Add any special notes, dietary restrictions, allergies, or preferences here..."></textarea>
-            </div>
-        </div>
-    </div>
+			.mobile-meal-group.daily-plan h4 {
+				background: transparent;
+				border-bottom: 2px solid #4caf50;
+				color: #2e7d32;
+			}
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    
-    <script>
-        // Firebase configuration - using a demo project
-        // For production, create your own Firebase project at https://console.firebase.google.com
-        const firebaseConfig = {
-            apiKey: "AIzaSyDtfBL0IQL7aHrQydLGrprUxDFCxAJgzB8",
-            authDomain: "food-itinerary-demo.firebaseapp.com",
-            databaseURL: "https://food-itinerary-demo-default-rtdb.firebaseio.com",
-            projectId: "food-itinerary-demo",
-            storageBucket: "food-itinerary-demo.appspot.com",
-            messagingSenderId: "384573829475",
-            appId: "1:384573829475:web:2a4b5c6d7e8f9g0h1i2j3k"
-        };
+			.mobile-meal-input {
+				width: 100%;
+				min-height: 80px;
+				padding: 15px;
+				border: 2px solid #dee2e6;
+				border-radius: 8px;
+				font-family: inherit;
+				font-size: 16px;
+				line-height: 1.5;
+				resize: vertical;
+				transition: border-color 0.3s ease;
+			}
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+			.mobile-meal-input:focus {
+				outline: none;
+				border-color: #74b9ff;
+				background: #f8f9ff;
+			}
 
-        // Get or create session ID from URL
-        let sessionId = new URLSearchParams(window.location.search).get('session');
-        if (!sessionId) {
-            sessionId = generateSessionId();
-            window.history.replaceState({}, '', `?session=${sessionId}`);
-        }
+			.bottom-section {
+				background: #f8f9fa;
+				padding: 30px;
+				margin-top: 40px;
+				border-top: 1px solid #dee2e6;
+			}
 
-        // Update share URL
-        document.getElementById('shareUrl').textContent = window.location.href;
+			.support-section {
+				background: white;
+				padding: 20px;
+				border-radius: 10px;
+				margin-top: 20px;
+				text-align: center;
+				border: 1px solid #dee2e6;
+			}
 
-        // Reference to this session's data
-        const sessionRef = database.ref(`sessions/${sessionId}`);
+			.support-section p {
+				margin: 0;
+				color: #636e72;
+				font-size: 14px;
+			}
 
-        // Status indicator
-        const statusDot = document.getElementById('statusDot');
-        const statusText = document.getElementById('statusText');
+			.support-section a {
+				color: #74b9ff;
+				text-decoration: none;
+				font-weight: 600;
+			}
 
-        // Connection state
-        database.ref('.info/connected').on('value', (snapshot) => {
-            if (snapshot.val() === true) {
-                statusDot.classList.add('connected');
-                statusText.textContent = 'Connected';
-            } else {
-                statusDot.classList.remove('connected');
-                statusText.textContent = 'Offline';
-            }
-        });
+			.support-section a:hover {
+				text-decoration: underline;
+			}
 
-        // Set up real-time listeners
-        setupRealtimeListeners();
+			@media (max-width: 768px) {
+				/* Hide desktop grid, show mobile tabs */
+				.desktop-grid {
+					display: none;
+				}
 
-        // Set up input handlers
-        setupInputHandlers();
+				.mobile-tabs {
+					display: flex;
+				}
 
-        function generateSessionId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
-        }
+				.mobile-day-container {
+					display: block;
+				}
 
-        function setupRealtimeListeners() {
-            // Trip info listeners
-            sessionRef.child('eventName').on('value', (snapshot) => {
-                const val = snapshot.val();
-                if (val !== null && document.getElementById('eventName').value !== val) {
-                    document.getElementById('eventName').value = val;
-                }
-            });
+				.trip-info {
+					flex-direction: column;
+					align-items: center;
+					gap: 15px;
+				}
 
-            sessionRef.child('dates').on('value', (snapshot) => {
-                const val = snapshot.val();
-                if (val !== null && document.getElementById('groupSize').value !== val) {
-                    document.getElementById('groupSize').value = val;
-                }
-            });
+				.info-card {
+					width: 100%;
+					max-width: 350px;
+					text-align: center;
+					min-width: auto;
+				}
 
-            sessionRef.child('location').on('value', (snapshot) => {
-                const val = snapshot.val();
-                if (val !== null && document.getElementById('location').value !== val) {
-                    document.getElementById('location').value = val;
-                }
-            });
+				.info-card input {
+					font-size: 14px;
+					padding: 10px 12px;
+				}
 
-            // Meal cell listeners
-            document.querySelectorAll('.meal-cell').forEach(cell => {
-                const mealId = cell.getAttribute('data-meal');
-                sessionRef.child(`meals/${mealId}`).on('value', (snapshot) => {
-                    const val = snapshot.val();
-                    if (val !== null && cell.value !== val) {
-                        cell.value = val;
-                    }
-                });
-            });
+				.status-indicator {
+					top: 5px;
+					right: 5px;
+					padding: 6px 12px;
+					font-size: 12px;
+					gap: 6px;
+				}
 
-            // Special notes listener
-            sessionRef.child('specialNotes').on('value', (snapshot) => {
-                const val = snapshot.val();
-                const notesEl = document.getElementById('specialNotes');
-                if (val !== null && notesEl.value !== val) {
-                    notesEl.value = val;
-                }
-            });
-        }
+				.active-users {
+					padding: 3px 10px;
+					margin-left: 6px;
+					font-size: 11px;
+				}
 
-        function setupInputHandlers() {
-            // Debounce function
-            function debounce(func, wait) {
-                let timeout;
-                return function executedFunction(...args) {
-                    const later = () => {
-                        clearTimeout(timeout);
-                        func(...args);
-                    };
-                    clearTimeout(timeout);
-                    timeout = setTimeout(later, wait);
-                };
-            }
+				.header h1 {
+					font-size: 1.8em;
+					margin-bottom: 15px;
+				}
 
-            // Trip info inputs
-            document.getElementById('eventName').addEventListener('input', debounce((e) => {
-                sessionRef.child('eventName').set(e.target.value);
-                showSavingIndicator();
-            }, 500));
+				.header p {
+					font-size: 0.9em;
+					line-height: 1.5;
+					margin: 15px auto;
+					padding: 0 15px;
+				}
 
-            document.getElementById('groupSize').addEventListener('input', debounce((e) => {
-                sessionRef.child('dates').set(e.target.value);
-                showSavingIndicator();
-            }, 500));
+				.main-content {
+					padding: 15px;
+				}
 
-            document.getElementById('location').addEventListener('input', debounce((e) => {
-                sessionRef.child('location').set(e.target.value);
-                showSavingIndicator();
-            }, 500));
+				.container {
+					margin: 10px;
+					border-radius: 15px;
+				}
 
-            // Meal cells
-            document.querySelectorAll('.meal-cell').forEach(cell => {
-                const mealId = cell.getAttribute('data-meal');
-                cell.addEventListener('input', debounce((e) => {
-                    sessionRef.child(`meals/${mealId}`).set(e.target.value);
-                    showSavingIndicator();
-                }, 500));
-            });
+				body {
+					padding: 5px;
+				}
 
-            // Special notes
-            document.getElementById('specialNotes').addEventListener('input', debounce((e) => {
-                sessionRef.child('specialNotes').set(e.target.value);
-                showSavingIndicator();
-            }, 500));
-        }
+				.share-section {
+					padding: 15px;
+					margin-bottom: 15px;
+				}
 
-        function showSavingIndicator() {
-            statusDot.classList.add('saving');
-            statusText.textContent = 'Saving...';
-            
-            setTimeout(() => {
-                statusDot.classList.remove('saving');
-                statusText.textContent = 'Connected';
-            }, 1000);
-        }
+				.share-url {
+					padding: 8px;
+					margin: 8px 0;
+					font-size: 12px;
+				}
 
-        function copyShareUrl() {
-            const shareUrl = window.location.href;
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                const button = document.querySelector('.copy-button');
-                const originalText = button.textContent;
-                button.textContent = '✅ Copied!';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                }, 2000);
-            });
-        }
-    </script>
-</body>
+				.special-notes {
+					padding: 15px;
+					margin-bottom: 15px;
+				}
+
+				.bottom-section {
+					padding: 20px 15px;
+					margin-top: 30px;
+				}
+
+				.support-section {
+					padding: 15px;
+					margin-top: 15px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="status-indicator">
+			<div class="status-dot" id="statusDot"></div>
+			<span id="statusText">Connecting...</span>
+			<div class="active-users" id="activeUsers" style="display: none">
+				<span id="userCount">0</span> viewing
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="header">
+				<h1>Bailey's Birthday Beach Weekend</h1>
+				<p
+					style="
+						max-width: 800px;
+						margin: 20px auto;
+						font-size: 1.1em;
+						line-height: 1.6;
+						opacity: 0.95;
+					"
+				>
+					Hey beach crew! Bailey's birthday beach weekend is all set
+					for July 25–27. I tried to email everyone the info to our
+					townhome at the Palmilla Beach Resort when I booked, let me
+					know if you didn't get it! Here's the link as well:
+					<a
+						href="https://www.vacasa.com/unit/97484"
+						target="_blank"
+						style="color: white; text-decoration: underline"
+						>https://www.vacasa.com/unit/97484</a
+					>
+					<br /><br />
+					We're excited to celebrate her with all of you! It means a
+					lot that you're showing up for her.
+				</p>
+				<div class="trip-info">
+					<div class="info-card">
+						<strong>Event:</strong>
+						<input
+							type="text"
+							id="eventName"
+							placeholder="Bailey's Birthday"
+							value="Bailey's Birthday Beach Weekend"
+						/>
+					</div>
+					<div class="info-card">
+						<strong>Dates:</strong>
+						<input
+							type="text"
+							id="groupSize"
+							placeholder="July 25-27"
+							value="July 25-27"
+						/>
+					</div>
+					<div class="info-card">
+						<strong>Location:</strong>
+						<input
+							type="text"
+							id="location"
+							placeholder="Palmilla Beach Resort"
+							value="Palmilla Beach Resort"
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<!-- Mobile Tabs (hidden on desktop) -->
+				<div class="mobile-tabs">
+					<button class="tab-button active" data-day="friday">
+						Fri 25th
+					</button>
+					<button class="tab-button" data-day="saturday">
+						Sat 26th
+					</button>
+					<button class="tab-button" data-day="sunday">
+						Sun 27th
+					</button>
+				</div>
+
+				<!-- Desktop Grid (hidden on mobile) -->
+				<div class="meal-grid desktop-grid">
+					<div class="grid-header">Meal</div>
+					<div class="grid-header">Friday July 25th</div>
+					<div class="grid-header">Saturday July 26th</div>
+					<div class="grid-header">Sunday July 27th</div>
+
+					<div class="meal-label">Breakfast</div>
+					<textarea
+						class="meal-cell"
+						data-day="Friday July 25th"
+						data-meal="breakfast-1"
+						placeholder="Click to add breakfast plans..."
+					></textarea>
+					<textarea
+						class="meal-cell"
+						data-day="Saturday July 26th"
+						data-meal="breakfast-2"
+						placeholder="Click to add breakfast plans..."
+					></textarea>
+					<textarea
+						class="meal-cell"
+						data-day="Sunday July 27th"
+						data-meal="breakfast-3"
+						placeholder="Click to add breakfast plans..."
+					></textarea>
+
+					<div class="meal-label">Lunch</div>
+					<textarea
+						class="meal-cell"
+						data-day="Friday July 25th"
+						data-meal="lunch-1"
+						placeholder="Click to add lunch plans..."
+					></textarea>
+					<textarea
+						class="meal-cell"
+						data-day="Saturday July 26th"
+						data-meal="lunch-2"
+						placeholder="Click to add lunch plans..."
+					></textarea>
+					<textarea
+						class="meal-cell"
+						data-day="Sunday July 27th"
+						data-meal="lunch-3"
+						placeholder="Click to add lunch plans..."
+					></textarea>
+
+					<div class="meal-label">Dinner</div>
+					<textarea
+						class="meal-cell"
+						data-day="Friday July 25th"
+						data-meal="dinner-1"
+						placeholder="Click to add dinner plans..."
+					></textarea>
+					<textarea
+						class="meal-cell"
+						data-day="Saturday July 26th"
+						data-meal="dinner-2"
+						placeholder="Click to add dinner plans..."
+					></textarea>
+					<textarea
+						class="meal-cell"
+						data-day="Sunday July 27th"
+						data-meal="dinner-3"
+						placeholder="Click to add dinner plans..."
+					></textarea>
+				</div>
+
+				<!-- Mobile Day Views -->
+				<div class="mobile-day-container">
+					<!-- Friday -->
+					<div class="day-content" id="day-friday">
+						<div class="mobile-meal-group daily-plan">
+							<h4>Daily Plan</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-plan="friday-plan"
+								placeholder="Friday's schedule: When are we meeting? Where? What activities? Transportation plans..."
+							></textarea>
+						</div>
+						<div class="mobile-meal-group">
+							<h4>Breakfast</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-meal="breakfast-1"
+								placeholder="Friday breakfast plans..."
+							></textarea>
+						</div>
+						<div class="mobile-meal-group">
+							<h4>Lunch</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-meal="lunch-1"
+								placeholder="Friday lunch plans..."
+							></textarea>
+						</div>
+						<div class="mobile-meal-group">
+							<h4>Dinner</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-meal="dinner-1"
+								placeholder="Friday dinner plans..."
+							></textarea>
+						</div>
+					</div>
+
+					<!-- Saturday -->
+					<div
+						class="day-content"
+						id="day-saturday"
+						style="display: none"
+					>
+						<div class="mobile-meal-group daily-plan">
+							<h4>Daily Plan</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-plan="saturday-plan"
+								placeholder="Saturday's schedule: Beach activities? Birthday celebration plans? What time? Where?"
+							></textarea>
+						</div>
+						<div class="mobile-meal-group">
+							<h4>Breakfast</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-meal="breakfast-2"
+								placeholder="Saturday breakfast plans..."
+							></textarea>
+						</div>
+						<div class="mobile-meal-group">
+							<h4>Lunch</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-meal="lunch-2"
+								placeholder="Saturday lunch plans..."
+							></textarea>
+						</div>
+						<div class="mobile-meal-group">
+							<h4>Dinner</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-meal="dinner-2"
+								placeholder="Saturday dinner plans..."
+							></textarea>
+						</div>
+					</div>
+
+					<!-- Sunday -->
+					<div
+						class="day-content"
+						id="day-sunday"
+						style="display: none"
+					>
+						<div class="mobile-meal-group daily-plan">
+							<h4>Daily Plan</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-plan="sunday-plan"
+								placeholder="Sunday's schedule: Check-out time? Departure plans? Final beach time? Travel arrangements?"
+							></textarea>
+						</div>
+						<div class="mobile-meal-group">
+							<h4>Breakfast</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-meal="breakfast-3"
+								placeholder="Sunday breakfast plans..."
+							></textarea>
+						</div>
+						<div class="mobile-meal-group">
+							<h4>Lunch</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-meal="lunch-3"
+								placeholder="Sunday lunch plans..."
+							></textarea>
+						</div>
+						<div class="mobile-meal-group">
+							<h4>Dinner</h4>
+							<textarea
+								class="mobile-meal-input"
+								data-meal="dinner-3"
+								placeholder="Sunday dinner plans..."
+							></textarea>
+						</div>
+					</div>
+				</div>
+
+				<div class="special-notes">
+					<h3>Special Notes & Dietary Restrictions</h3>
+					<textarea
+						class="notes-textarea"
+						id="specialNotes"
+						placeholder="Add any special notes, dietary restrictions, allergies, or preferences here..."
+					></textarea>
+				</div>
+			</div>
+
+			<!-- Share Section at Bottom -->
+			<div class="bottom-section">
+				<div class="share-section">
+					<h3>Share This Itinerary</h3>
+					<p>
+						Anyone with this link can view and edit the meal plan in
+						real-time!
+					</p>
+					<div class="share-url" id="shareUrl">Loading...</div>
+					<button class="copy-button" onclick="copyShareUrl()">
+						Copy Link
+					</button>
+				</div>
+
+				<div class="support-section">
+					<p>
+						Need help, found a bug, or want to request a change?
+						Contact me at
+						<a href="mailto:bufordeeds8@gmail.com"
+							>bufordeeds8@gmail.com</a
+						>
+						I'm happy to help.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Firebase -->
+		<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+		<script>
+			// Firebase configuration
+			const firebaseConfig = {
+				apiKey: 'AIzaSyCCvC9SA8gHcG7jStN8RKUhh8_wIJlwimk',
+				authDomain: 'dev-projects-28948.firebaseapp.com',
+				databaseURL:
+					'https://dev-projects-28948-default-rtdb.firebaseio.com',
+				projectId: 'dev-projects-28948',
+				storageBucket: 'dev-projects-28948.firebasestorage.app',
+				messagingSenderId: '609771874067',
+				appId: '1:609771874067:web:ec83a9df9633a68e139ce6'
+			};
+
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+			const database = firebase.database();
+
+			// Get or create session ID from URL
+			let sessionId = new URLSearchParams(window.location.search).get(
+				'session'
+			);
+			if (!sessionId) {
+				sessionId = generateSessionId();
+				window.history.replaceState({}, '', `?session=${sessionId}`);
+			}
+
+			// Update share URL
+			document.getElementById('shareUrl').textContent =
+				window.location.href;
+
+			// Reference to this session's data
+			const sessionRef = database.ref(`sessions/${sessionId}`);
+
+			// Status indicator
+			const statusDot = document.getElementById('statusDot');
+			const statusText = document.getElementById('statusText');
+			const activeUsersDiv = document.getElementById('activeUsers');
+			const userCountSpan = document.getElementById('userCount');
+
+			// Connection state
+			database.ref('.info/connected').on('value', (snapshot) => {
+				if (snapshot.val() === true) {
+					statusDot.classList.add('connected');
+					statusText.textContent = 'Connected';
+
+					// Add this user to presence list
+					const userRef = sessionRef.child('presence').push();
+					userRef.set(true);
+					userRef.onDisconnect().remove();
+				} else {
+					statusDot.classList.remove('connected');
+					statusText.textContent = 'Offline';
+				}
+			});
+
+			// Monitor active users
+			sessionRef.child('presence').on('value', (snapshot) => {
+				const users = snapshot.val() || {};
+				const userCount = Object.keys(users).length;
+
+				if (userCount > 0) {
+					activeUsersDiv.style.display = 'block';
+					userCountSpan.textContent = userCount;
+				} else {
+					activeUsersDiv.style.display = 'none';
+				}
+			});
+
+			// Set up real-time listeners
+			setupRealtimeListeners();
+
+			// Set up input handlers
+			setupInputHandlers();
+
+			// Set up mobile tabs
+			setupMobileTabs();
+
+			function generateSessionId() {
+				return (
+					Date.now().toString(36) +
+					Math.random().toString(36).substr(2, 9)
+				);
+			}
+
+			function setupRealtimeListeners() {
+				// Trip info listeners
+				sessionRef.child('eventName').on('value', (snapshot) => {
+					const val = snapshot.val();
+					if (
+						val !== null &&
+						document.getElementById('eventName').value !== val
+					) {
+						document.getElementById('eventName').value = val;
+					}
+				});
+
+				sessionRef.child('dates').on('value', (snapshot) => {
+					const val = snapshot.val();
+					if (
+						val !== null &&
+						document.getElementById('groupSize').value !== val
+					) {
+						document.getElementById('groupSize').value = val;
+					}
+				});
+
+				sessionRef.child('location').on('value', (snapshot) => {
+					const val = snapshot.val();
+					if (
+						val !== null &&
+						document.getElementById('location').value !== val
+					) {
+						document.getElementById('location').value = val;
+					}
+				});
+
+				// Meal cell listeners (both desktop and mobile)
+				document.querySelectorAll('.meal-cell').forEach((cell) => {
+					const mealId = cell.getAttribute('data-meal');
+					sessionRef
+						.child(`meals/${mealId}`)
+						.on('value', (snapshot) => {
+							const val = snapshot.val();
+							if (val !== null && cell.value !== val) {
+								cell.value = val;
+								syncToMobileInput(mealId, val);
+							}
+						});
+				});
+
+				document
+					.querySelectorAll('.mobile-meal-input')
+					.forEach((input) => {
+						const mealId = input.getAttribute('data-meal');
+						const planId = input.getAttribute('data-plan');
+
+						if (mealId) {
+							sessionRef
+								.child(`meals/${mealId}`)
+								.on('value', (snapshot) => {
+									const val = snapshot.val();
+									if (val !== null && input.value !== val) {
+										input.value = val;
+										syncToDesktopInput(mealId, val);
+									}
+								});
+						} else if (planId) {
+							sessionRef
+								.child(`plans/${planId}`)
+								.on('value', (snapshot) => {
+									const val = snapshot.val();
+									if (val !== null && input.value !== val) {
+										input.value = val;
+									}
+								});
+						}
+					});
+
+				// Special notes listener
+				sessionRef.child('specialNotes').on('value', (snapshot) => {
+					const val = snapshot.val();
+					const notesEl = document.getElementById('specialNotes');
+					if (val !== null && notesEl.value !== val) {
+						notesEl.value = val;
+					}
+				});
+			}
+
+			function setupInputHandlers() {
+				// Debounce function
+				function debounce(func, wait) {
+					let timeout;
+					return function executedFunction(...args) {
+						const later = () => {
+							clearTimeout(timeout);
+							func(...args);
+						};
+						clearTimeout(timeout);
+						timeout = setTimeout(later, wait);
+					};
+				}
+
+				// Trip info inputs
+				document.getElementById('eventName').addEventListener(
+					'input',
+					debounce((e) => {
+						sessionRef.child('eventName').set(e.target.value);
+						showSavingIndicator();
+					}, 500)
+				);
+
+				document.getElementById('groupSize').addEventListener(
+					'input',
+					debounce((e) => {
+						sessionRef.child('dates').set(e.target.value);
+						showSavingIndicator();
+					}, 500)
+				);
+
+				document.getElementById('location').addEventListener(
+					'input',
+					debounce((e) => {
+						sessionRef.child('location').set(e.target.value);
+						showSavingIndicator();
+					}, 500)
+				);
+
+				// Desktop meal cells
+				document.querySelectorAll('.meal-cell').forEach((cell) => {
+					const mealId = cell.getAttribute('data-meal');
+					cell.addEventListener(
+						'input',
+						debounce((e) => {
+							sessionRef
+								.child(`meals/${mealId}`)
+								.set(e.target.value);
+							syncToMobileInput(mealId, e.target.value);
+							showSavingIndicator();
+						}, 500)
+					);
+				});
+
+				// Mobile meal inputs
+				document
+					.querySelectorAll('.mobile-meal-input')
+					.forEach((input) => {
+						const mealId = input.getAttribute('data-meal');
+						const planId = input.getAttribute('data-plan');
+
+						if (mealId) {
+							input.addEventListener(
+								'input',
+								debounce((e) => {
+									sessionRef
+										.child(`meals/${mealId}`)
+										.set(e.target.value);
+									syncToDesktopInput(mealId, e.target.value);
+									showSavingIndicator();
+								}, 500)
+							);
+						} else if (planId) {
+							input.addEventListener(
+								'input',
+								debounce((e) => {
+									sessionRef
+										.child(`plans/${planId}`)
+										.set(e.target.value);
+									showSavingIndicator();
+								}, 500)
+							);
+						}
+					});
+
+				// Special notes
+				document.getElementById('specialNotes').addEventListener(
+					'input',
+					debounce((e) => {
+						sessionRef.child('specialNotes').set(e.target.value);
+						showSavingIndicator();
+					}, 500)
+				);
+			}
+
+			function setupMobileTabs() {
+				const tabButtons = document.querySelectorAll('.tab-button');
+				const dayContents = document.querySelectorAll('.day-content');
+
+				tabButtons.forEach((button) => {
+					button.addEventListener('click', () => {
+						const targetDay = button.getAttribute('data-day');
+
+						// Update active tab
+						tabButtons.forEach((btn) =>
+							btn.classList.remove('active')
+						);
+						button.classList.add('active');
+
+						// Show corresponding day content
+						dayContents.forEach((content) => {
+							content.style.display = 'none';
+						});
+						document.getElementById(
+							`day-${targetDay}`
+						).style.display = 'block';
+					});
+				});
+			}
+
+			function syncToMobileInput(mealId, value) {
+				const mobileInput = document.querySelector(
+					`.mobile-meal-input[data-meal="${mealId}"]`
+				);
+				if (mobileInput && mobileInput.value !== value) {
+					mobileInput.value = value;
+				}
+			}
+
+			function syncToDesktopInput(mealId, value) {
+				const desktopInput = document.querySelector(
+					`.meal-cell[data-meal="${mealId}"]`
+				);
+				if (desktopInput && desktopInput.value !== value) {
+					desktopInput.value = value;
+				}
+			}
+
+			function showSavingIndicator() {
+				statusDot.classList.add('saving');
+				statusText.textContent = 'Saving...';
+
+				setTimeout(() => {
+					statusDot.classList.remove('saving');
+					statusText.textContent = 'Connected';
+				}, 1000);
+			}
+
+			function copyShareUrl() {
+				const shareUrl = window.location.href;
+				navigator.clipboard.writeText(shareUrl).then(() => {
+					const button = document.querySelector('.copy-button');
+					const originalText = button.textContent;
+					button.textContent = 'Copied!';
+					setTimeout(() => {
+						button.textContent = originalText;
+					}, 2000);
+				});
+			}
+		</script>
+	</body>
 </html>
