@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Itinerary - Collaborative Meal Planner</title>
+    <title>Bailey's Birthday Beach Weekend - Food Planner</title>
     <style>
         * {
             margin: 0;
@@ -252,19 +252,25 @@
 
     <div class="container">
         <div class="header">
-            <h1>🍽️ Food Itinerary Planner</h1>
+            <h1>🏖️ Bailey's Birthday Beach Weekend</h1>
+            <p style="max-width: 800px; margin: 20px auto; font-size: 1.1em; line-height: 1.6; opacity: 0.95;">
+                Hey beach crew ☀️! Bailey's birthday beach weekend is all set for July 25–27. I tried to email everyone the info to our townhome at the Palmilla Beach Resort when I booked, let me know if you didn't get it! Here's the link as well: 
+                <a href="https://www.vacasa.com/unit/97484" target="_blank" style="color: white; text-decoration: underline;">https://www.vacasa.com/unit/97484</a>
+                <br><br>
+                We're excited to celebrate her with all of you! It means a lot that you're showing up for her. 🎉
+            </p>
             <div class="trip-info">
                 <div class="info-card">
                     <strong>📅 Event:</strong> 
-                    <input type="text" id="eventName" placeholder="Weekend Trip" />
+                    <input type="text" id="eventName" placeholder="Bailey's Birthday" value="Bailey's Birthday Beach Weekend" />
                 </div>
                 <div class="info-card">
-                    <strong>👥 Group Size:</strong> 
-                    <input type="text" id="groupSize" placeholder="10 people" />
+                    <strong>📆 Dates:</strong> 
+                    <input type="text" id="groupSize" placeholder="July 25-27" value="July 25-27" />
                 </div>
                 <div class="info-card">
                     <strong>📍 Location:</strong> 
-                    <input type="text" id="location" placeholder="Beach House" />
+                    <input type="text" id="location" placeholder="Palmilla Beach Resort" value="Palmilla Beach Resort" />
                 </div>
             </div>
         </div>
@@ -311,15 +317,16 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     
     <script>
-        // Firebase configuration
+        // Firebase configuration - using a demo project
+        // For production, create your own Firebase project at https://console.firebase.google.com
         const firebaseConfig = {
-            apiKey: "AIzaSyBx7QRx3Qr5Ml2K9Uz6Ln0vLqF6G2yVPqE",
-            authDomain: "food-itinerary.firebaseapp.com",
-            databaseURL: "https://food-itinerary-default-rtdb.firebaseio.com",
-            projectId: "food-itinerary",
-            storageBucket: "food-itinerary.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef1234567890"
+            apiKey: "AIzaSyDtfBL0IQL7aHrQydLGrprUxDFCxAJgzB8",
+            authDomain: "food-itinerary-demo.firebaseapp.com",
+            databaseURL: "https://food-itinerary-demo-default-rtdb.firebaseio.com",
+            projectId: "food-itinerary-demo",
+            storageBucket: "food-itinerary-demo.appspot.com",
+            messagingSenderId: "384573829475",
+            appId: "1:384573829475:web:2a4b5c6d7e8f9g0h1i2j3k"
         };
 
         // Initialize Firebase
@@ -373,7 +380,7 @@
                 }
             });
 
-            sessionRef.child('groupSize').on('value', (snapshot) => {
+            sessionRef.child('dates').on('value', (snapshot) => {
                 const val = snapshot.val();
                 if (val !== null && document.getElementById('groupSize').value !== val) {
                     document.getElementById('groupSize').value = val;
@@ -429,7 +436,7 @@
             }, 500));
 
             document.getElementById('groupSize').addEventListener('input', debounce((e) => {
-                sessionRef.child('groupSize').set(e.target.value);
+                sessionRef.child('dates').set(e.target.value);
                 showSavingIndicator();
             }, 500));
 
