@@ -1,6 +1,8 @@
 import { database, getSessionId, generateMealId } from './firebase-config.js';
 import { getCurrentUserName } from './user-management.js';
 
+const EVENT_MEMBERS = ['Adrienne', 'AJ', 'Buford', 'Casey', 'Ikay', 'Keith', 'Larissa', 'Mark', 'RK', 'Zeke'];
+
 // Meal Management Functions
 let currentMealSlot = null;
 let currentMealId = null;
@@ -40,6 +42,7 @@ export function openEditMealModal(mealId, mealData) {
 	document.getElementById('mealName').value = mealData.name || '';
 	document.getElementById('mealDescription').value = mealData.description || '';
 	document.getElementById('mealRecipeLink').value = mealData.recipeLink || '';
+	document.getElementById('mealClaimedBy').value = mealData.claimedBy || '';
 	
 	// Update modal title and actions
 	document.getElementById('mealModalTitle').textContent = 'Edit Meal';
@@ -64,6 +67,7 @@ export function saveMeal(event) {
 	const mealName = document.getElementById('mealName').value.trim();
 	const mealDescription = document.getElementById('mealDescription').value.trim();
 	const mealRecipeLink = document.getElementById('mealRecipeLink').value.trim();
+	const mealClaimedBy = document.getElementById('mealClaimedBy').value;
 	
 	if (!mealName) {
 		alert('Please enter a meal name');
@@ -80,7 +84,8 @@ export function saveMeal(event) {
 		name: mealName,
 		description: mealDescription,
 		recipeLink: mealRecipeLink,
-		createdBy: getCurrentUserName(),
+		addedBy: getCurrentUserName(),
+		claimedBy: mealClaimedBy,
 		slot: currentMealSlot,
 		timestamp: Date.now()
 	};
@@ -159,50 +164,51 @@ function renderMealCards(meals) {
 
 function createMealCard(mealId, mealData) {
 	const currentUser = getCurrentUserName();
-	const isMyMeal = mealData.createdBy === currentUser;
 	const isClaimed = mealData.claimedBy && mealData.claimedBy !== '';
 	const isClaimedByMe = mealData.claimedBy === currentUser;
 
 	const card = document.createElement('div');
-	card.className = `meal-card ${isClaimed ? 'claimed' : ''} ${isMyMeal ? 'mine' : ''}`;
+	card.className = `meal-card ${isClaimed ? 'claimed' : ''}`;
 	
 	let recipeLink = '';
 	if (mealData.recipeLink) {
 		recipeLink = `<a href="${mealData.recipeLink}" target="_blank" class="meal-recipe-link"><i data-lucide="external-link"></i> Recipe</a>`;
 	}
 
-	let claimButton = '';
-	if (!isClaimed) {
-		claimButton = `<button class="meal-btn claim" onclick="claimMeal('${mealId}')" title="Claim this meal"><i data-lucide="user-plus"></i></button>`;
-	} else if (isClaimedByMe) {
-		claimButton = `<button class="meal-btn claim" onclick="unclaimMeal('${mealId}')" title="Unclaim this meal"><i data-lucide="user-check"></i></button>`;
-	}
-
-	let editButton = '';
-	if (isMyMeal) {
-		editButton = `
-			<button class="meal-btn edit" onclick="openEditMealModal('${mealId}', ${JSON.stringify(mealData).replace(/"/g, '&quot;')})" title="Edit meal"><i data-lucide="edit"></i></button>
-			<button class="meal-btn delete" onclick="deleteMealCard('${mealId}')" title="Delete meal"><i data-lucide="trash-2"></i></button>
-		`;
-	}
+	// Allow anyone to edit/delete any meal
+	const editButton = `
+		<button class="meal-btn edit" onclick="openEditMealModal('${mealId}', ${JSON.stringify(mealData).replace(/"/g, '&quot;')})" title="Edit meal"><i data-lucide="edit"></i></button>
+		<button class="meal-btn delete" onclick="deleteMealCard('${mealId}')" title="Delete meal"><i data-lucide="trash-2"></i></button>
+	`;
 
 	card.innerHTML = `
 		<div class="meal-card-header">
 			<h3 class="meal-name">${mealData.name}</h3>
 			<div class="meal-actions">
 				${editButton}
-				${claimButton}
 			</div>
 		</div>
 		${mealData.description ? `<div class="meal-description">${mealData.description}</div>` : ''}
 		<div class="meal-meta">
 			<div>
-				<span class="meal-creator">Created by ${mealData.createdBy}</span>
-				${isClaimed ? `<br><span class="meal-claimer"><i data-lucide="user-check"></i> ${mealData.claimedBy} is handling this</span>` : ''}
+				<span class="meal-creator">Added by ${mealData.addedBy || mealData.createdBy}</span>
+				${isClaimed ? `<br><span class="meal-claimer"><i data-lucide="user-check"></i> ${mealData.claimedBy} is handling this</span>` : '<br><span class="meal-unclaimed">No one assigned yet</span>'}
 			</div>
 			${recipeLink}
 		</div>
 	`;
+
+	// Add click event to card for editing
+	card.addEventListener('click', (e) => {
+		// Don't trigger if clicking on buttons or links
+		if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.closest('button') || e.target.closest('a')) {
+			return;
+		}
+		openEditMealModal(mealId, mealData);
+	});
+
+	// Add cursor pointer to indicate clickable
+	card.style.cursor = 'pointer';
 
 	// Initialize Lucide icons for this card
 	setTimeout(() => {
@@ -214,36 +220,6 @@ function createMealCard(mealId, mealData) {
 	return card;
 }
 
-export function claimMeal(mealId) {
-	const currentUser = getCurrentUserName();
-	sessionRef.child(`meals/${mealId}/claimedBy`).set(currentUser)
-		.then(() => {
-			showSavingIndicator();
-			const statusText = document.getElementById('statusText');
-			statusText.textContent = 'Meal claimed!';
-			setTimeout(() => {
-				statusText.textContent = 'Connected';
-			}, 2000);
-		})
-		.catch((error) => {
-			alert('Error claiming meal: ' + error.message);
-		});
-}
-
-export function unclaimMeal(mealId) {
-	sessionRef.child(`meals/${mealId}/claimedBy`).remove()
-		.then(() => {
-			showSavingIndicator();
-			const statusText = document.getElementById('statusText');
-			statusText.textContent = 'Meal unclaimed!';
-			setTimeout(() => {
-				statusText.textContent = 'Connected';
-			}, 2000);
-		})
-		.catch((error) => {
-			alert('Error unclaiming meal: ' + error.message);
-		});
-}
 
 export function deleteMealCard(mealId) {
 	if (confirm('Are you sure you want to delete this meal?')) {

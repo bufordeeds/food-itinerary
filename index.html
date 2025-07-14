@@ -216,6 +216,23 @@
 						/>
 					</div>
 					
+					<div class="meal-form-group">
+						<label class="meal-form-label" for="mealClaimedBy">Who's handling this? (Optional)</label>
+						<select class="meal-form-input" id="mealClaimedBy">
+							<option value="">No one yet</option>
+							<option value="Adrienne">Adrienne</option>
+							<option value="AJ">AJ</option>
+							<option value="Buford">Buford</option>
+							<option value="Casey">Casey</option>
+							<option value="Ikay">Ikay</option>
+							<option value="Keith">Keith</option>
+							<option value="Larissa">Larissa</option>
+							<option value="Mark">Mark</option>
+							<option value="RK">RK</option>
+							<option value="Zeke">Zeke</option>
+						</select>
+					</div>
+					
 					<div class="meal-form-actions">
 						<button type="button" class="meal-form-btn secondary" onclick="closeMealModal()">
 							Cancel
@@ -299,99 +316,86 @@
 			</div>
 
 			<div class="main-content">
-				<!-- Mobile Tabs (hidden on desktop) -->
-				<div class="mobile-tabs">
-					<button class="tab-button active" data-day="friday">
-						Fri 25th
+				<!-- Main Tab Navigation -->
+				<div class="main-tabs">
+					<button class="main-tab-button active" data-tab="itinerary">
+						<i data-lucide="calendar"></i> Itinerary
 					</button>
-					<button class="tab-button" data-day="saturday">
-						Sat 26th
+					<button class="main-tab-button" data-tab="meals">
+						<i data-lucide="utensils"></i> Meal Planning
 					</button>
-					<button class="tab-button" data-day="sunday">
-						Sun 27th
+					<button class="main-tab-button" data-tab="expenses">
+						<i data-lucide="dollar-sign"></i> Expenses
 					</button>
 				</div>
 
-				<!-- Desktop Grid (hidden on mobile) -->
-				<div class="meal-grid desktop-grid">
-					<div class="grid-header">Meal</div>
-					<div class="grid-header">Friday July 25th</div>
-					<div class="grid-header">Saturday July 26th</div>
-					<div class="grid-header">Sunday July 27th</div>
-
-					<div class="meal-label">Breakfast</div>
-					<textarea
-						class="meal-cell"
-						data-day="Friday July 25th"
-						data-meal="breakfast-1"
-						placeholder="Click to add breakfast plans..."
-					></textarea>
-					<textarea
-						class="meal-cell"
-						data-day="Saturday July 26th"
-						data-meal="breakfast-2"
-						placeholder="Click to add breakfast plans..."
-					></textarea>
-					<textarea
-						class="meal-cell"
-						data-day="Sunday July 27th"
-						data-meal="breakfast-3"
-						placeholder="Click to add breakfast plans..."
-					></textarea>
-
-					<div class="meal-label">Lunch</div>
-					<textarea
-						class="meal-cell"
-						data-day="Friday July 25th"
-						data-meal="lunch-1"
-						placeholder="Click to add lunch plans..."
-					></textarea>
-					<textarea
-						class="meal-cell"
-						data-day="Saturday July 26th"
-						data-meal="lunch-2"
-						placeholder="Click to add lunch plans..."
-					></textarea>
-					<textarea
-						class="meal-cell"
-						data-day="Sunday July 27th"
-						data-meal="lunch-3"
-						placeholder="Click to add lunch plans..."
-					></textarea>
-
-					<div class="meal-label">Dinner</div>
-					<textarea
-						class="meal-cell"
-						data-day="Friday July 25th"
-						data-meal="dinner-1"
-						placeholder="Click to add dinner plans..."
-					></textarea>
-					<textarea
-						class="meal-cell"
-						data-day="Saturday July 26th"
-						data-meal="dinner-2"
-						placeholder="Click to add dinner plans..."
-					></textarea>
-					<textarea
-						class="meal-cell"
-						data-day="Sunday July 27th"
-						data-meal="dinner-3"
-						placeholder="Click to add dinner plans..."
-					></textarea>
-				</div>
-
-				<!-- Mobile Day Views -->
-				<div class="mobile-day-container">
-					<!-- Friday -->
-					<div class="day-content" id="day-friday">
-						<div class="mobile-meal-group daily-plan">
-							<h4>Itinerary Notes</h4>
+				<!-- Tab Content Container -->
+				<div class="tab-content-container">
+					<!-- Itinerary Tab -->
+					<div class="tab-content active" id="itinerary-content">
+						<div class="itinerary-section">
+							<h3>Daily Schedule</h3>
+							
+							<!-- Friday Schedule -->
+							<div class="day-schedule">
+								<h4>Friday July 25th</h4>
+								<textarea
+									class="schedule-input"
+									data-plan="friday-plan"
+									placeholder="Friday's schedule: When are we meeting? Where? What activities? Transportation plans..."
+								></textarea>
+							</div>
+							
+							<!-- Saturday Schedule -->
+							<div class="day-schedule">
+								<h4>Saturday July 26th</h4>
+								<textarea
+									class="schedule-input"
+									data-plan="saturday-plan"
+									placeholder="Saturday's schedule: Beach activities? Birthday celebration plans? What time? Where?"
+								></textarea>
+							</div>
+							
+							<!-- Sunday Schedule -->
+							<div class="day-schedule">
+								<h4>Sunday July 27th</h4>
+								<textarea
+									class="schedule-input"
+									data-plan="sunday-plan"
+									placeholder="Sunday's schedule: Check-out time? Departure plans? Final beach time? Travel arrangements?"
+								></textarea>
+							</div>
+						</div>
+						
+						<div class="special-notes">
+							<h3>Special Notes & Dietary Restrictions</h3>
 							<textarea
-								class="mobile-meal-input"
-								data-plan="friday-plan"
-								placeholder="Friday's schedule: When are we meeting? Where? What activities? Transportation plans..."
+								class="notes-textarea"
+								id="specialNotes"
+								placeholder="Add any special notes, dietary restrictions, allergies, or preferences here..."
 							></textarea>
 						</div>
+					</div>
+
+					<!-- Meal Planning Tab -->
+					<div class="tab-content" id="meals-content">
+						<!-- Mobile Day Tabs -->
+						<div class="mobile-tabs">
+							<button class="tab-button active" data-day="friday">
+								Fri 25th
+							</button>
+							<button class="tab-button" data-day="saturday">
+								Sat 26th
+							</button>
+							<button class="tab-button" data-day="sunday">
+								Sun 27th
+							</button>
+						</div>
+
+						<!-- Mobile Day Views -->
+						<div class="mobile-day-container">
+							<!-- Friday -->
+							<div class="day-content" id="day-friday">
 						<div class="mobile-meal-group meal-section">
 							<h4>Breakfast</h4>
 							<div class="meal-cards-container" data-meal-slot="breakfast-1">
@@ -418,20 +422,8 @@
 						</div>
 					</div>
 
-					<!-- Saturday -->
-					<div
-						class="day-content"
-						id="day-saturday"
-						style="display: none"
-					>
-						<div class="mobile-meal-group daily-plan">
-							<h4>Itinerary Notes</h4>
-							<textarea
-								class="mobile-meal-input"
-								data-plan="saturday-plan"
-								placeholder="Saturday's schedule: Beach activities? Birthday celebration plans? What time? Where?"
-							></textarea>
-						</div>
+							<!-- Saturday -->
+							<div class="day-content" id="day-saturday" style="display: none">
 						<div class="mobile-meal-group meal-section">
 							<h4>Breakfast</h4>
 							<div class="meal-cards-container" data-meal-slot="breakfast-2">
@@ -458,20 +450,8 @@
 						</div>
 					</div>
 
-					<!-- Sunday -->
-					<div
-						class="day-content"
-						id="day-sunday"
-						style="display: none"
-					>
-						<div class="mobile-meal-group daily-plan">
-							<h4>Itinerary Notes</h4>
-							<textarea
-								class="mobile-meal-input"
-								data-plan="sunday-plan"
-								placeholder="Sunday's schedule: Check-out time? Departure plans? Final beach time? Travel arrangements?"
-							></textarea>
-						</div>
+							<!-- Sunday -->
+							<div class="day-content" id="day-sunday" style="display: none">
 						<div class="mobile-meal-group meal-section">
 							<h4>Breakfast</h4>
 							<div class="meal-cards-container" data-meal-slot="breakfast-3">
@@ -496,36 +476,31 @@
 								</button>
 							</div>
 						</div>
-					</div>
-				</div>
-
-				<div class="special-notes">
-					<h3>Special Notes & Dietary Restrictions</h3>
-					<textarea
-						class="notes-textarea"
-						id="specialNotes"
-						placeholder="Add any special notes, dietary restrictions, allergies, or preferences here..."
-					></textarea>
-				</div>
-
-				<!-- Expense Tracking Section -->
-				<div class="expense-section">
-					<div class="expense-header">
-						<h3>Expense Tracking</h3>
-						<button class="add-expense-btn" onclick="openAddExpenseModal()">
-							<i data-lucide="plus"></i> Add Expense
-						</button>
-					</div>
-					
-					<div class="expense-content">
-						<div class="expenses-list" id="expensesList">
-							<p class="no-expenses">No expenses added yet</p>
 						</div>
-						
-						<div class="expense-summary" id="expenseSummary">
-							<div class="summary-header">
-								<h4>Expense Summary</h4>
-								<p class="total-amount">Total: $0.00</p>
+						</div>
+					</div>
+
+					<!-- Expenses Tab -->
+					<div class="tab-content" id="expenses-content">
+						<div class="expense-section">
+							<div class="expense-header">
+								<h3>Expense Tracking</h3>
+								<button class="add-expense-btn" onclick="openAddExpenseModal()">
+									<i data-lucide="plus"></i> Add Expense
+								</button>
+							</div>
+							
+							<div class="expense-content">
+								<div class="expenses-list" id="expensesList">
+									<p class="no-expenses">No expenses added yet</p>
+								</div>
+								
+								<div class="expense-summary" id="expenseSummary">
+									<div class="summary-header">
+										<h4>Expense Summary</h4>
+										<p class="total-amount">Total: $0.00</p>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

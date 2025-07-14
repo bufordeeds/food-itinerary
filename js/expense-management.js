@@ -291,13 +291,18 @@ function calculateSettlements(balances) {
         }
     });
 
+    // Sort creditors and debtors by amount (largest first)
     creditors.sort((a, b) => b.amount - a.amount);
     debtors.sort((a, b) => b.amount - a.amount);
 
+    // Create working copies to avoid modifying originals
+    const workingCreditors = creditors.map(c => ({ ...c }));
+    const workingDebtors = debtors.map(d => ({ ...d }));
+
     let i = 0, j = 0;
-    while (i < creditors.length && j < debtors.length) {
-        const creditor = creditors[i];
-        const debtor = debtors[j];
+    while (i < workingCreditors.length && j < workingDebtors.length) {
+        const creditor = workingCreditors[i];
+        const debtor = workingDebtors[j];
         
         const settleAmount = Math.min(creditor.amount, debtor.amount);
         

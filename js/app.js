@@ -1,6 +1,6 @@
 import { database, getSessionId } from './firebase-config.js';
 import { setupUserManagement, saveUserName, openUserNameModal } from './user-management.js';
-import { setupMealCards, openAddMealModal, closeMealModal, saveMeal, deleteMeal, openEditMealModal, claimMeal, unclaimMeal, deleteMealCard } from './meal-management.js';
+import { setupMealCards, openAddMealModal, closeMealModal, saveMeal, deleteMeal, openEditMealModal, deleteMealCard } from './meal-management.js';
 import { initializeExpenseManagement } from './expense-management.js';
 
 // Get session reference
@@ -21,6 +21,7 @@ function initializeApp() {
 	setupConnectionStatus();
 	setupRealtimeListeners();
 	setupInputHandlers();
+	setupMainTabs();
 	setupMobileTabs();
 	setupUserManagement();
 	setupMealCards();
@@ -81,16 +82,17 @@ function setupRealtimeListeners() {
 		}
 	});
 
-	// Meal cell listeners (both desktop and mobile)
-	document.querySelectorAll('.meal-cell').forEach((cell) => {
-		const mealId = cell.getAttribute('data-meal');
-		sessionRef.child(`meals/${mealId}`).on('value', (snapshot) => {
-			const val = snapshot.val();
-			if (val !== null && cell.value !== val) {
-				cell.value = val;
-				syncToMobileInput(mealId, val);
-			}
-		});
+	// Schedule input listeners
+	document.querySelectorAll('.schedule-input').forEach((input) => {
+		const planId = input.getAttribute('data-plan');
+		if (planId) {
+			sessionRef.child(`plans/${planId}`).on('value', (snapshot) => {
+				const val = snapshot.val();
+				if (val !== null && input.value !== val) {
+					input.value = val;
+				}
+			});
+		}
 	});
 
 	document.querySelectorAll('.mobile-meal-input').forEach((input) => {
@@ -155,14 +157,15 @@ function setupInputHandlers() {
 		showSavingIndicator();
 	}, 500));
 
-	// Desktop meal cells
-	document.querySelectorAll('.meal-cell').forEach((cell) => {
-		const mealId = cell.getAttribute('data-meal');
-		cell.addEventListener('input', debounce((e) => {
-			sessionRef.child(`meals/${mealId}`).set(e.target.value);
-			syncToMobileInput(mealId, e.target.value);
-			showSavingIndicator();
-		}, 500));
+	// Schedule inputs
+	document.querySelectorAll('.schedule-input').forEach((input) => {
+		const planId = input.getAttribute('data-plan');
+		if (planId) {
+			input.addEventListener('input', debounce((e) => {
+				sessionRef.child(`plans/${planId}`).set(e.target.value);
+				showSavingIndicator();
+			}, 500));
+		}
 	});
 
 	// Mobile meal inputs
@@ -170,13 +173,7 @@ function setupInputHandlers() {
 		const mealId = input.getAttribute('data-meal');
 		const planId = input.getAttribute('data-plan');
 
-		if (mealId) {
-			input.addEventListener('input', debounce((e) => {
-				sessionRef.child(`meals/${mealId}`).set(e.target.value);
-				syncToDesktopInput(mealId, e.target.value);
-				showSavingIndicator();
-			}, 500));
-		} else if (planId) {
+		if (planId) {
 			input.addEventListener('input', debounce((e) => {
 				sessionRef.child(`plans/${planId}`).set(e.target.value);
 				showSavingIndicator();
@@ -189,6 +186,27 @@ function setupInputHandlers() {
 		sessionRef.child('specialNotes').set(e.target.value);
 		showSavingIndicator();
 	}, 500));
+}
+
+function setupMainTabs() {
+	const mainTabButtons = document.querySelectorAll('.main-tab-button');
+	const tabContents = document.querySelectorAll('.tab-content');
+
+	mainTabButtons.forEach((button) => {
+		button.addEventListener('click', () => {
+			const targetTab = button.getAttribute('data-tab');
+
+			// Update active main tab
+			mainTabButtons.forEach((btn) => btn.classList.remove('active'));
+			button.classList.add('active');
+
+			// Show corresponding tab content
+			tabContents.forEach((content) => {
+				content.classList.remove('active');
+			});
+			document.getElementById(`${targetTab}-content`).classList.add('active');
+		});
+	});
 }
 
 function setupMobileTabs() {
@@ -212,19 +230,6 @@ function setupMobileTabs() {
 	});
 }
 
-function syncToMobileInput(mealId, value) {
-	const mobileInput = document.querySelector(`.mobile-meal-input[data-meal="${mealId}"]`);
-	if (mobileInput && mobileInput.value !== value) {
-		mobileInput.value = value;
-	}
-}
-
-function syncToDesktopInput(mealId, value) {
-	const desktopInput = document.querySelector(`.meal-cell[data-meal="${mealId}"]`);
-	if (desktopInput && desktopInput.value !== value) {
-		desktopInput.value = value;
-	}
-}
 
 function showSavingIndicator() {
 	statusDot.classList.add('saving');
@@ -257,8 +262,6 @@ window.closeMealModal = closeMealModal;
 window.saveMeal = saveMeal;
 window.deleteMeal = deleteMeal;
 window.openEditMealModal = openEditMealModal;
-window.claimMeal = claimMeal;
-window.unclaimMeal = unclaimMeal;
 window.deleteMealCard = deleteMealCard;
 
 // Initialize when DOM is loaded
