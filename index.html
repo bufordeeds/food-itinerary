@@ -8,11 +8,17 @@
 		<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 	</head>
 	<body>
-		<div class="status-indicator">
+		<div class="status-indicator" id="statusIndicator">
 			<div class="status-dot" id="statusDot"></div>
 			<span id="statusText">Connecting...</span>
 			<div class="active-users" id="activeUsers" style="display: none">
 				<span id="userCount">0</span> viewing
+			</div>
+			<div class="connected-users-list" id="connectedUsersList" style="display: none;">
+				<div class="users-list-header">Connected Users</div>
+				<div class="users-list-content" id="usersListContent">
+					<!-- User names will be populated here -->
+				</div>
 			</div>
 		</div>
 
@@ -379,104 +385,104 @@
 
 					<!-- Meal Planning Tab -->
 					<div class="tab-content" id="meals-content">
-						<!-- Mobile Day Tabs -->
-						<div class="mobile-tabs">
-							<button class="tab-button active" data-day="friday">
+						<!-- Day Tabs (responsive) -->
+						<div class="day-tabs">
+							<button class="day-tab-button active" data-day="friday">
 								Fri 25th
 							</button>
-							<button class="tab-button" data-day="saturday">
+							<button class="day-tab-button" data-day="saturday">
 								Sat 26th
 							</button>
-							<button class="tab-button" data-day="sunday">
+							<button class="day-tab-button" data-day="sunday">
 								Sun 27th
 							</button>
 						</div>
 
-						<!-- Mobile Day Views -->
-						<div class="mobile-day-container">
+						<!-- Day Content Views (responsive) -->
+						<div class="day-content-container">
 							<!-- Friday -->
 							<div class="day-content" id="day-friday">
-						<div class="mobile-meal-group meal-section">
-							<h4>Breakfast</h4>
-							<div class="meal-cards-container" data-meal-slot="breakfast-1">
-								<button class="add-meal-btn" onclick="openAddMealModal('breakfast-1')">
-									<i data-lucide="plus"></i> Add Breakfast
-								</button>
+								<div class="meal-group">
+									<h4>Breakfast</h4>
+									<div class="meal-cards-container" data-meal-slot="breakfast-1">
+										<button class="add-meal-btn" onclick="openAddMealModal('breakfast-1')">
+											<i data-lucide="plus"></i> Add Breakfast
+										</button>
+									</div>
+								</div>
+								<div class="meal-group">
+									<h4>Lunch</h4>
+									<div class="meal-cards-container" data-meal-slot="lunch-1">
+										<button class="add-meal-btn" onclick="openAddMealModal('lunch-1')">
+											<i data-lucide="plus"></i> Add Lunch
+										</button>
+									</div>
+								</div>
+								<div class="meal-group">
+									<h4>Dinner</h4>
+									<div class="meal-cards-container" data-meal-slot="dinner-1">
+										<button class="add-meal-btn" onclick="openAddMealModal('dinner-1')">
+											<i data-lucide="plus"></i> Add Dinner
+										</button>
+									</div>
+								</div>
 							</div>
-						</div>
-						<div class="mobile-meal-group meal-section">
-							<h4>Lunch</h4>
-							<div class="meal-cards-container" data-meal-slot="lunch-1">
-								<button class="add-meal-btn" onclick="openAddMealModal('lunch-1')">
-									<i data-lucide="plus"></i> Add Lunch
-								</button>
-							</div>
-						</div>
-						<div class="mobile-meal-group meal-section">
-							<h4>Dinner</h4>
-							<div class="meal-cards-container" data-meal-slot="dinner-1">
-								<button class="add-meal-btn" onclick="openAddMealModal('dinner-1')">
-									<i data-lucide="plus"></i> Add Dinner
-								</button>
-							</div>
-						</div>
-					</div>
 
 							<!-- Saturday -->
 							<div class="day-content" id="day-saturday" style="display: none">
-						<div class="mobile-meal-group meal-section">
-							<h4>Breakfast</h4>
-							<div class="meal-cards-container" data-meal-slot="breakfast-2">
-								<button class="add-meal-btn" onclick="openAddMealModal('breakfast-2')">
-									<i data-lucide="plus"></i> Add Breakfast
-								</button>
+								<div class="meal-group">
+									<h4>Breakfast</h4>
+									<div class="meal-cards-container" data-meal-slot="breakfast-2">
+										<button class="add-meal-btn" onclick="openAddMealModal('breakfast-2')">
+											<i data-lucide="plus"></i> Add Breakfast
+										</button>
+									</div>
+								</div>
+								<div class="meal-group">
+									<h4>Lunch</h4>
+									<div class="meal-cards-container" data-meal-slot="lunch-2">
+										<button class="add-meal-btn" onclick="openAddMealModal('lunch-2')">
+											<i data-lucide="plus"></i> Add Lunch
+										</button>
+									</div>
+								</div>
+								<div class="meal-group">
+									<h4>Dinner</h4>
+									<div class="meal-cards-container" data-meal-slot="dinner-2">
+										<button class="add-meal-btn" onclick="openAddMealModal('dinner-2')">
+											<i data-lucide="plus"></i> Add Dinner
+										</button>
+									</div>
+								</div>
 							</div>
-						</div>
-						<div class="mobile-meal-group meal-section">
-							<h4>Lunch</h4>
-							<div class="meal-cards-container" data-meal-slot="lunch-2">
-								<button class="add-meal-btn" onclick="openAddMealModal('lunch-2')">
-									<i data-lucide="plus"></i> Add Lunch
-								</button>
-							</div>
-						</div>
-						<div class="mobile-meal-group meal-section">
-							<h4>Dinner</h4>
-							<div class="meal-cards-container" data-meal-slot="dinner-2">
-								<button class="add-meal-btn" onclick="openAddMealModal('dinner-2')">
-									<i data-lucide="plus"></i> Add Dinner
-								</button>
-							</div>
-						</div>
-					</div>
 
 							<!-- Sunday -->
 							<div class="day-content" id="day-sunday" style="display: none">
-						<div class="mobile-meal-group meal-section">
-							<h4>Breakfast</h4>
-							<div class="meal-cards-container" data-meal-slot="breakfast-3">
-								<button class="add-meal-btn" onclick="openAddMealModal('breakfast-3')">
-									<i data-lucide="plus"></i> Add Breakfast
-								</button>
+								<div class="meal-group">
+									<h4>Breakfast</h4>
+									<div class="meal-cards-container" data-meal-slot="breakfast-3">
+										<button class="add-meal-btn" onclick="openAddMealModal('breakfast-3')">
+											<i data-lucide="plus"></i> Add Breakfast
+										</button>
+									</div>
+								</div>
+								<div class="meal-group">
+									<h4>Lunch</h4>
+									<div class="meal-cards-container" data-meal-slot="lunch-3">
+										<button class="add-meal-btn" onclick="openAddMealModal('lunch-3')">
+											<i data-lucide="plus"></i> Add Lunch
+										</button>
+									</div>
+								</div>
+								<div class="meal-group">
+									<h4>Dinner</h4>
+									<div class="meal-cards-container" data-meal-slot="dinner-3">
+										<button class="add-meal-btn" onclick="openAddMealModal('dinner-3')">
+											<i data-lucide="plus"></i> Add Dinner
+										</button>
+									</div>
+								</div>
 							</div>
-						</div>
-						<div class="mobile-meal-group meal-section">
-							<h4>Lunch</h4>
-							<div class="meal-cards-container" data-meal-slot="lunch-3">
-								<button class="add-meal-btn" onclick="openAddMealModal('lunch-3')">
-									<i data-lucide="plus"></i> Add Lunch
-								</button>
-							</div>
-						</div>
-						<div class="mobile-meal-group meal-section">
-							<h4>Dinner</h4>
-							<div class="meal-cards-container" data-meal-slot="dinner-3">
-								<button class="add-meal-btn" onclick="openAddMealModal('dinner-3')">
-									<i data-lucide="plus"></i> Add Dinner
-								</button>
-							</div>
-						</div>
-						</div>
 						</div>
 					</div>
 

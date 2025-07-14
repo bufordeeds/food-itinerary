@@ -210,15 +210,16 @@ function setupMainTabs() {
 }
 
 function setupMobileTabs() {
-	const tabButtons = document.querySelectorAll('.tab-button');
+	// Setup both old tab-button and new day-tab-button classes
+	const tabButtons = document.querySelectorAll('.tab-button, .day-tab-button');
 	const dayContents = document.querySelectorAll('.day-content');
 
 	tabButtons.forEach((button) => {
 		button.addEventListener('click', () => {
 			const targetDay = button.getAttribute('data-day');
 
-			// Update active tab
-			tabButtons.forEach((btn) => btn.classList.remove('active'));
+			// Update active tab for both old and new button classes
+			document.querySelectorAll('.tab-button, .day-tab-button').forEach((btn) => btn.classList.remove('active'));
 			button.classList.add('active');
 
 			// Show corresponding day content
