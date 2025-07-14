@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Itinerary - Collaborative Meal Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .trip-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .info-card {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-card input {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .info-card input::placeholder {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .meal-grid {
+            display: grid;
+            grid-template-columns: 150px repeat(3, 1fr);
+            gap: 2px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .grid-header {
+            background: #2d3436;
+            color: white;
+            padding: 20px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .meal-label {
+            background: #636e72;
+            color: white;
+            padding: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .meal-cell {
+            background: white;
+            padding: 15px;
+            min-height: 120px;
+            position: relative;
+            border: none;
+            resize: none;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .meal-cell:focus {
+            outline: 3px solid #74b9ff;
+            background: #f8f9ff;
+        }
+
+        .special-notes {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .special-notes h3 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .status-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+
+        .status-dot.connected {
+            background: #00b894;
+        }
+
+        .status-dot.saving {
+            background: #fdcb6e;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .share-section {
+            background: #e8f5e9;
+            border: 2px solid #c8e6c9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .share-url {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            word-break: break-all;
+            font-family: monospace;
+        }
+
+        .copy-button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .copy-button:hover {
+            background: #45a049;
+        }
+
+        @media (max-width: 768px) {
+            .meal-grid {
+                grid-template-columns: 100px 1fr;
+                font-size: 14px;
+            }
+
+            .grid-header:not(:first-child) {
+                display: none;
+            }
+
+            .meal-cell {
+                grid-column: 2;
+                position: relative;
+            }
+
+            .meal-cell::before {
+                content: attr(data-day);
+                position: absolute;
+                top: 5px;
+                right: 10px;
+                background: #74b9ff;
+                color: white;
+                padding: 2px 8px;
+                border-radius: 10px;
+                font-size: 12px;
+                font-weight: bold;
+            }
+
+            .trip-info {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="status-indicator">
+        <div class="status-dot" id="statusDot"></div>
+        <span id="statusText">Connecting...</span>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ Food Itinerary Planner</h1>
+            <div class="trip-info">
+                <div class="info-card">
+                    <strong>📅 Event:</strong> 
+                    <input type="text" id="eventName" placeholder="Weekend Trip" />
+                </div>
+                <div class="info-card">
+                    <strong>👥 Group Size:</strong> 
+                    <input type="text" id="groupSize" placeholder="10 people" />
+                </div>
+                <div class="info-card">
+                    <strong>📍 Location:</strong> 
+                    <input type="text" id="location" placeholder="Beach House" />
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="share-section">
+                <h3>📤 Share This Itinerary</h3>
+                <p>Anyone with this link can view and edit the meal plan in real-time!</p>
+                <div class="share-url" id="shareUrl">Loading...</div>
+                <button class="copy-button" onclick="copyShareUrl()">📋 Copy Link</button>
+            </div>
+
+            <div class="meal-grid">
+                <div class="grid-header">Meal</div>
+                <div class="grid-header">Day 1</div>
+                <div class="grid-header">Day 2</div>
+                <div class="grid-header">Day 3</div>
+
+                <div class="meal-label">🌅 Breakfast</div>
+                <textarea class="meal-cell" data-day="Day 1" data-meal="breakfast-1" placeholder="Click to add breakfast plans..."></textarea>
+                <textarea class="meal-cell" data-day="Day 2" data-meal="breakfast-2" placeholder="Click to add breakfast plans..."></textarea>
+                <textarea class="meal-cell" data-day="Day 3" data-meal="breakfast-3" placeholder="Click to add breakfast plans..."></textarea>
+
+                <div class="meal-label">🌞 Lunch</div>
+                <textarea class="meal-cell" data-day="Day 1" data-meal="lunch-1" placeholder="Click to add lunch plans..."></textarea>
+                <textarea class="meal-cell" data-day="Day 2" data-meal="lunch-2" placeholder="Click to add lunch plans..."></textarea>
+                <textarea class="meal-cell" data-day="Day 3" data-meal="lunch-3" placeholder="Click to add lunch plans..."></textarea>
+
+                <div class="meal-label">🌙 Dinner</div>
+                <textarea class="meal-cell" data-day="Day 1" data-meal="dinner-1" placeholder="Click to add dinner plans..."></textarea>
+                <textarea class="meal-cell" data-day="Day 2" data-meal="dinner-2" placeholder="Click to add dinner plans..."></textarea>
+                <textarea class="meal-cell" data-day="Day 3" data-meal="dinner-3" placeholder="Click to add dinner plans..."></textarea>
+            </div>
+
+            <div class="special-notes">
+                <h3>📝 Special Notes & Dietary Restrictions</h3>
+                <textarea class="notes-textarea" id="specialNotes" placeholder="Add any special notes, dietary restrictions, allergies, or preferences here..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx7QRx3Qr5Ml2K9Uz6Ln0vLqF6G2yVPqE",
+            authDomain: "food-itinerary.firebaseapp.com",
+            databaseURL: "https://food-itinerary-default-rtdb.firebaseio.com",
+            projectId: "food-itinerary",
+            storageBucket: "food-itinerary.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Get or create session ID from URL
+        let sessionId = new URLSearchParams(window.location.search).get('session');
+        if (!sessionId) {
+            sessionId = generateSessionId();
+            window.history.replaceState({}, '', `?session=${sessionId}`);
+        }
+
+        // Update share URL
+        document.getElementById('shareUrl').textContent = window.location.href;
+
+        // Reference to this session's data
+        const sessionRef = database.ref(`sessions/${sessionId}`);
+
+        // Status indicator
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+
+        // Connection state
+        database.ref('.info/connected').on('value', (snapshot) => {
+            if (snapshot.val() === true) {
+                statusDot.classList.add('connected');
+                statusText.textContent = 'Connected';
+            } else {
+                statusDot.classList.remove('connected');
+                statusText.textContent = 'Offline';
+            }
+        });
+
+        // Set up real-time listeners
+        setupRealtimeListeners();
+
+        // Set up input handlers
+        setupInputHandlers();
+
+        function generateSessionId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+        }
+
+        function setupRealtimeListeners() {
+            // Trip info listeners
+            sessionRef.child('eventName').on('value', (snapshot) => {
+                const val = snapshot.val();
+                if (val !== null && document.getElementById('eventName').value !== val) {
+                    document.getElementById('eventName').value = val;
+                }
+            });
+
+            sessionRef.child('groupSize').on('value', (snapshot) => {
+                const val = snapshot.val();
+                if (val !== null && document.getElementById('groupSize').value !== val) {
+                    document.getElementById('groupSize').value = val;
+                }
+            });
+
+            sessionRef.child('location').on('value', (snapshot) => {
+                const val = snapshot.val();
+                if (val !== null && document.getElementById('location').value !== val) {
+                    document.getElementById('location').value = val;
+                }
+            });
+
+            // Meal cell listeners
+            document.querySelectorAll('.meal-cell').forEach(cell => {
+                const mealId = cell.getAttribute('data-meal');
+                sessionRef.child(`meals/${mealId}`).on('value', (snapshot) => {
+                    const val = snapshot.val();
+                    if (val !== null && cell.value !== val) {
+                        cell.value = val;
+                    }
+                });
+            });
+
+            // Special notes listener
+            sessionRef.child('specialNotes').on('value', (snapshot) => {
+                const val = snapshot.val();
+                const notesEl = document.getElementById('specialNotes');
+                if (val !== null && notesEl.value !== val) {
+                    notesEl.value = val;
+                }
+            });
+        }
+
+        function setupInputHandlers() {
+            // Debounce function
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            // Trip info inputs
+            document.getElementById('eventName').addEventListener('input', debounce((e) => {
+                sessionRef.child('eventName').set(e.target.value);
+                showSavingIndicator();
+            }, 500));
+
+            document.getElementById('groupSize').addEventListener('input', debounce((e) => {
+                sessionRef.child('groupSize').set(e.target.value);
+                showSavingIndicator();
+            }, 500));
+
+            document.getElementById('location').addEventListener('input', debounce((e) => {
+                sessionRef.child('location').set(e.target.value);
+                showSavingIndicator();
+            }, 500));
+
+            // Meal cells
+            document.querySelectorAll('.meal-cell').forEach(cell => {
+                const mealId = cell.getAttribute('data-meal');
+                cell.addEventListener('input', debounce((e) => {
+                    sessionRef.child(`meals/${mealId}`).set(e.target.value);
+                    showSavingIndicator();
+                }, 500));
+            });
+
+            // Special notes
+            document.getElementById('specialNotes').addEventListener('input', debounce((e) => {
+                sessionRef.child('specialNotes').set(e.target.value);
+                showSavingIndicator();
+            }, 500));
+        }
+
+        function showSavingIndicator() {
+            statusDot.classList.add('saving');
+            statusText.textContent = 'Saving...';
+            
+            setTimeout(() => {
+                statusDot.classList.remove('saving');
+                statusText.textContent = 'Connected';
+            }, 1000);
+        }
+
+        function copyShareUrl() {
+            const shareUrl = window.location.href;
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                const button = document.querySelector('.copy-button');
+                const originalText = button.textContent;
+                button.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
