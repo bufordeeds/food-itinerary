@@ -1,6 +1,7 @@
 import { database, getSessionId } from './firebase-config.js';
 import { setupUserManagement, saveUserName, openUserNameModal } from './user-management.js';
 import { setupMealCards, openAddMealModal, closeMealModal, saveMeal, deleteMeal, openEditMealModal, claimMeal, unclaimMeal, deleteMealCard } from './meal-management.js';
+import { initializeExpenseManagement } from './expense-management.js';
 
 // Get session reference
 const sessionId = getSessionId();
@@ -23,6 +24,7 @@ function initializeApp() {
 	setupMobileTabs();
 	setupUserManagement();
 	setupMealCards();
+	initializeExpenseManagement();
 }
 
 function setupConnectionStatus() {

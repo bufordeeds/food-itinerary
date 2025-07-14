@@ -38,6 +38,141 @@
 			</div>
 		</div>
 
+		<!-- Expense Modal -->
+		<div class="expense-modal" id="expenseModal" style="display: none;">
+			<div class="expense-modal-content">
+				<div class="expense-modal-header">
+					<h2 class="expense-modal-title" id="expenseModalTitle">Add Expense</h2>
+					<button class="close-modal-btn" onclick="closeExpenseModal()">
+						<i data-lucide="x"></i>
+					</button>
+				</div>
+				
+				<form id="expenseForm" onsubmit="saveExpense(event)">
+					<div class="expense-form-group">
+						<label class="expense-form-label" for="expenseName">Expense Name *</label>
+						<input 
+							type="text" 
+							class="expense-form-input" 
+							id="expenseName" 
+							placeholder="e.g., Groceries for Saturday dinner"
+							maxlength="50"
+							required
+						/>
+					</div>
+					
+					<div class="expense-form-group">
+						<label class="expense-form-label" for="expenseAmount">Amount Paid *</label>
+						<input 
+							type="text" 
+							class="expense-form-input" 
+							id="expenseAmount" 
+							placeholder="0.00"
+							pattern="[0-9]+(\.[0-9]{0,2})?"
+							required
+						/>
+					</div>
+					
+					<div class="expense-form-group">
+						<label class="expense-form-label" for="expensePaidBy">Paid By *</label>
+						<select class="expense-form-input" id="expensePaidBy" required>
+							<option value="">Select who paid</option>
+							<option value="Adrienne">Adrienne</option>
+							<option value="AJ">AJ</option>
+							<option value="Buford">Buford</option>
+							<option value="Casey">Casey</option>
+							<option value="Ikay">Ikay</option>
+							<option value="Keith">Keith</option>
+							<option value="Larissa">Larissa</option>
+							<option value="Mark">Mark</option>
+							<option value="RK">RK</option>
+							<option value="Zeke">Zeke</option>
+						</select>
+					</div>
+					
+					<div class="expense-form-group">
+						<label class="expense-form-label" for="expenseVenmoUsername">Venmo Username (Optional)</label>
+						<input 
+							type="text" 
+							class="expense-form-input" 
+							id="expenseVenmoUsername" 
+							placeholder="bufordeeds"
+						/>
+						<small class="form-help-text">Enter your Venmo username so others can pay their share</small>
+					</div>
+					
+					<div class="expense-form-group">
+						<label class="expense-form-label" for="expenseDescription">Description (Optional)</label>
+						<textarea 
+							class="expense-form-input expense-form-textarea" 
+							id="expenseDescription" 
+							placeholder="Add any notes about this expense..."
+							maxlength="200"
+						></textarea>
+					</div>
+					
+					<div class="expense-form-group">
+						<label class="expense-form-label">Split Between</label>
+						<div class="split-options">
+							<label class="radio-option">
+								<input type="radio" name="splitType" value="all" id="splitAll" checked>
+								<span>All event members</span>
+							</label>
+							<label class="radio-option">
+								<input type="radio" name="splitType" value="select" id="splitSelect">
+								<span>Select specific members</span>
+							</label>
+						</div>
+						
+						<div class="member-checkboxes" id="memberCheckboxes" style="display: none;">
+							<label class="member-checkbox">
+								<input type="checkbox" value="Adrienne"> Adrienne
+							</label>
+							<label class="member-checkbox">
+								<input type="checkbox" value="AJ"> AJ
+							</label>
+							<label class="member-checkbox">
+								<input type="checkbox" value="Buford"> Buford
+							</label>
+							<label class="member-checkbox">
+								<input type="checkbox" value="Casey"> Casey
+							</label>
+							<label class="member-checkbox">
+								<input type="checkbox" value="Ikay"> Ikay
+							</label>
+							<label class="member-checkbox">
+								<input type="checkbox" value="Keith"> Keith
+							</label>
+							<label class="member-checkbox">
+								<input type="checkbox" value="Larissa"> Larissa
+							</label>
+							<label class="member-checkbox">
+								<input type="checkbox" value="Mark"> Mark
+							</label>
+							<label class="member-checkbox">
+								<input type="checkbox" value="RK"> RK
+							</label>
+							<label class="member-checkbox">
+								<input type="checkbox" value="Zeke"> Zeke
+							</label>
+						</div>
+					</div>
+					
+					<div class="expense-form-actions">
+						<button type="button" class="expense-form-btn danger" id="deleteExpenseBtn" onclick="deleteExpense()" style="display: none;">
+							Delete Expense
+						</button>
+						<button type="button" class="expense-form-btn secondary" onclick="closeExpenseModal()">
+							Cancel
+						</button>
+						<button type="submit" class="expense-form-btn primary" id="saveExpenseBtn">
+							Add Expense
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
 		<!-- Add/Edit Meal Modal -->
 		<div class="meal-modal" id="mealModal" style="display: none;">
 			<div class="meal-modal-content">
@@ -371,6 +506,29 @@
 						id="specialNotes"
 						placeholder="Add any special notes, dietary restrictions, allergies, or preferences here..."
 					></textarea>
+				</div>
+
+				<!-- Expense Tracking Section -->
+				<div class="expense-section">
+					<div class="expense-header">
+						<h3>Expense Tracking</h3>
+						<button class="add-expense-btn" onclick="openAddExpenseModal()">
+							<i data-lucide="plus"></i> Add Expense
+						</button>
+					</div>
+					
+					<div class="expense-content">
+						<div class="expenses-list" id="expensesList">
+							<p class="no-expenses">No expenses added yet</p>
+						</div>
+						
+						<div class="expense-summary" id="expenseSummary">
+							<div class="summary-header">
+								<h4>Expense Summary</h4>
+								<p class="total-amount">Total: $0.00</p>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
